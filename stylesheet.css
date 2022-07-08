@@ -1,0 +1,24 @@
+@media screen and (min-width: 350px) and (min-height: 150px) and (orientation: landscape)
+{
+  #canvas
+  {
+    top: 50%;
+    left: 50%;
+    width: min(80vw, 560vh/3);
+    height: min(80vh, 240vw/7);
+    position: fixed;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    transform: translate(-50%, -50%);
+  }
+}
+
+
+/* https://www.includehelp.com/code-snippets/javascript-to-detect-whether-page-is-load-on-mobile-or-desktop.aspx
+https://www.w3schools.com/howto/howto_js_media_queries.asp
+https://www.w3schools.com/css/css3_mediaqueries.asp
+https://www.w3schools.com/css/tryit.asp?filename=trycss3_media_queries1
+https://www.w3schools.com/css/css3_mediaqueries_ex.asp
+https://www.w3schools.com/cssref/css3_pr_mediaquery.asp
+https://www.w3schools.com/jsref/met_win_matchmedia.asp */
