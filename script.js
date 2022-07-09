@@ -73,10 +73,6 @@ class Block
     {
       pen.fillStyle = this.c;
       pen.beginPath();
-      pen.roundRect(this.x, this.y, this.s, this.s, this.r);
-      pen.fill();
-
-      pen.beginPath();
       pen.moveTo(this.x + this.s, this.y + this.s);
       pen.arcTo(this.x, this.y + this.s, this.x, this.y, this.r);
       pen.arcTo(this.x, this.y, this.x + this.s, this.y, this.r);
