@@ -3,8 +3,6 @@
 // Yellow makes you stuck (movable?)
 // Brown is a barrier
 // Save color combos
-
-// Collision Detection --> https://spicyyoghurt.com/tutorials/html5-javascript-game-development/collision-detection-physics
 // Fireflies, Rain, Stars
 
 let canvas = document.getElementById("canvas");
@@ -23,7 +21,10 @@ function fixBlurryIndex ()
   canvas.setAttribute('width', blurryWidth * blurryIndex);
 }
 
-
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
 let d_x = true;
 let d_y = true;
 let keys = [];
@@ -56,6 +57,57 @@ window.addEventListener('keyup', (key) => {
     {
         keys.splice(keys.indexOf(key.keyCode), 1);
     }
+})
+
+document.addEventListener('touchstart', (swipe) => {
+  touchStartX = swipe.changedTouches[0].screenX;
+  touchStartY = swipe.changedTouches[0].screenY;
+})
+
+document.addEventListener('touchend', (swipe) => {
+  touchEndX = swipe.changedTouches[0].screenX;
+  touchEndY = swipe.changedTouches[0].screenY;
+
+  if (touchEndX > touchStartX)
+  {
+    let time = (touchEndX - touchStartX) * 5
+    keys.push(39);
+    setTimeout(function () {},  time);
+    if (keys.includes(39))
+    {
+      keys.splice(keys.indexOf(39), 1);
+    }
+  }
+  if (touchEndX < touchStartX)
+  {
+    let time = (touchStartX - touchEndX) * 5
+    keys.push(37);
+    setTimeout(function () {},  time);
+    if (keys.includes(37))
+    {
+      keys.splice(keys.indexOf(37), 1);
+    }
+  }
+  if (touchEndY > touchStartY)
+  {
+    let time = (touchEndY - touchStartY) * 5
+    keys.push(40);
+    setTimeout(function () {},  time);
+    if (keys.includes(40))
+    {
+      keys.splice(keys.indexOf(40), 1);
+    }
+  }
+  if (touchEndY < touchStartY)
+  {
+    let time = (touchStartY - touchEndY) * 5
+    keys.push(38);
+    setTimeout(function () {},  time);
+    if (keys.includes(38))
+    {
+      keys.splice(keys.indexOf(38), 1);
+    }
+  }
 })
 
 class Block
@@ -225,10 +277,7 @@ class PlayerBlock extends Block
     {
       y_shift = -(y1 - (y2 + s2));
     }
-
-//
-
-
+    //
   }
 
   move()
