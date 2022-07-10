@@ -1,3 +1,5 @@
+// Fix swiping. Clear background if canvas isn't loaded.
+
 // All green have to touch to win
 // Touching a red resets the level (movable?)
 // Yellow makes you stuck (movable?)
@@ -59,56 +61,7 @@ window.addEventListener('keyup', (key) => {
     }
 })
 
-document.addEventListener('touchstart', (swipe) => {
-  touchStartX = swipe.changedTouches[0].screenX;
-  touchStartY = swipe.changedTouches[0].screenY;
-})
 
-document.addEventListener('touchend', (swipe) => {
-  touchEndX = swipe.changedTouches[0].screenX;
-  touchEndY = swipe.changedTouches[0].screenY;
-
-  if (touchEndX > touchStartX)
-  {
-    let time = (touchEndX - touchStartX) * 5
-    keys.push(39);
-    setTimeout(function () {},  time);
-    if (keys.includes(39))
-    {
-      keys.splice(keys.indexOf(39), 1);
-    }
-  }
-  if (touchEndX < touchStartX)
-  {
-    let time = (touchStartX - touchEndX) * 5
-    keys.push(37);
-    setTimeout(function () {},  time);
-    if (keys.includes(37))
-    {
-      keys.splice(keys.indexOf(37), 1);
-    }
-  }
-  if (touchEndY > touchStartY)
-  {
-    let time = (touchEndY - touchStartY) * 5
-    keys.push(40);
-    setTimeout(function () {},  time);
-    if (keys.includes(40))
-    {
-      keys.splice(keys.indexOf(40), 1);
-    }
-  }
-  if (touchEndY < touchStartY)
-  {
-    let time = (touchStartY - touchEndY) * 5
-    keys.push(38);
-    setTimeout(function () {},  time);
-    if (keys.includes(38))
-    {
-      keys.splice(keys.indexOf(38), 1);
-    }
-  }
-})
 
 class Block
 {
@@ -302,17 +255,25 @@ function animate ()
   requestAnimationFrame(animate);
   pen.clearRect(0, 0, w, h);
 
-  one.resize(w/7);
-  one.accelerate();
-  one.decelerate();
-  one.collisions();
-  one.intersects(two);
-  one.move();
-  one.roundRect();
+  if ((innerWidth < 350) || (innerHeight < 150) || (innerWidth <= innerHeight))
+  {
 
-  two.resize(w/7);
-  two.reposition(3*w/7, h/3)
-  two.roundRect();
+  }
 
-  reset();
+  else
+  {
+    one.resize(w/7);
+    one.accelerate();
+    one.decelerate();
+    one.collisions();
+    one.intersects(two);
+    one.move();
+    one.roundRect();
+
+    two.resize(w/7);
+    two.reposition(3*w/7, h/3)
+    two.roundRect();
+
+    reset();
+  }
 }

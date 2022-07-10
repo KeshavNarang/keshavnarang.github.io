@@ -12,13 +12,10 @@
     border-color: black;
     transform: translate(-50%, -50%);
   }
+
+  #joystick
+  {
+    width: min(20vw, 20vh);
+    height: min(20vw, 20vh);
+  }
 }
-
-
-/* https://www.includehelp.com/code-snippets/javascript-to-detect-whether-page-is-load-on-mobile-or-desktop.aspx
-https://www.w3schools.com/howto/howto_js_media_queries.asp
-https://www.w3schools.com/css/css3_mediaqueries.asp
-https://www.w3schools.com/css/tryit.asp?filename=trycss3_media_queries1
-https://www.w3schools.com/css/css3_mediaqueries_ex.asp
-https://www.w3schools.com/cssref/css3_pr_mediaquery.asp
-https://www.w3schools.com/jsref/met_win_matchmedia.asp */
