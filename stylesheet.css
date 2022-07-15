@@ -1,21 +1,30 @@
 @media (min-width: 350px) and (min-height: 150px) and (orientation: landscape)
 {
-  #canvas
+  #game
   {
     top: 50%;
-    left: 50%;
-    width: min(80vw, 560vh/3);
-    height: min(80vh, 240vw/7);
+    left: 39%;
+    width: min(75vw, 75*8vh/4);
+    height: min(75vh, 75*4vw/8);
     position: fixed;
     border-width: 3px;
     border-style: solid;
     border-color: black;
+    border-radius: 3%;
     transform: translate(-50%, -50%);
   }
 
-  #joystick
+  #controls
   {
-    width: min(20vw, 20vh);
-    height: min(20vw, 20vh);
+    top: 50%;
+    left: 89%;
+    width: min(75vh/2, 75*4vw/16);
+    height: min(75vh, 75*4vw/8);
+    position: fixed;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 3%;
+    transform: translate(-50%, -50%);
   }
 }

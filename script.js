@@ -1,4 +1,4 @@
-// Fix swiping. Clear background if canvas isn't loaded.
+// Fix swiping. Add arrows. Add Joystick.
 
 // All green have to touch to win
 // Touching a red resets the level (movable?)
@@ -7,20 +7,20 @@
 // Save color combos
 // Fireflies, Rain, Stars
 
-let canvas = document.getElementById("canvas");
-canvas.width = Math.min(0.80*window.innerWidth, 5.60*window.innerHeight/3);
-canvas.height = Math.min(0.80*window.innerHeight, 2.40*window.innerWidth/7);
+let game = document.getElementById("game");
+game.width = Math.min(0.75*window.innerWidth, 0.75*8*window.innerHeight/4);
+game.height = Math.min(0.75*window.innerHeight, 0.75*4*window.innerWidth/8);
 
-let pen = canvas.getContext("2d");
+let pen = game.getContext("2d");
 
 let blurryIndex = window.devicePixelRatio;
 function fixBlurryIndex ()
 {
-  let blurryHeight = getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
-  let blurryWidth = getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
+  let blurryHeight = getComputedStyle(game).getPropertyValue("height").slice(0, -2);
+  let blurryWidth = getComputedStyle(game).getPropertyValue("width").slice(0, -2);
 
-  canvas.setAttribute('height', blurryHeight * blurryIndex);
-  canvas.setAttribute('width', blurryWidth * blurryIndex);
+  game.setAttribute('height', blurryHeight * blurryIndex);
+  game.setAttribute('width', blurryWidth * blurryIndex);
 }
 
 let touchStartX = 0;
@@ -43,8 +43,8 @@ function keyPressed (key)
 }
 
 window.addEventListener('resize', () => {
-  canvas.width = Math.min(0.80*window.innerWidth, 5.60*window.innerHeight/3);
-  canvas.height = Math.min(0.80*window.innerHeight, 2.40*window.innerWidth/7);
+  game.width = Math.min(0.80*window.innerWidth, 6.40*window.innerHeight/4);
+  game.height = Math.min(0.80*window.innerHeight, 3.20*window.innerWidth/8);
 })
 
 window.addEventListener('keydown', (key) => {
@@ -61,8 +61,6 @@ window.addEventListener('keyup', (key) => {
     }
 })
 
-
-
 class Block
 {
     constructor (c, x, y, s, r)
@@ -78,11 +76,11 @@ class Block
     {
       pen.fillStyle = this.c;
       pen.beginPath();
-      pen.moveTo(this.x + this.s, this.y + this.s);
+      pen.moveTo(this.x + this.r, this.y);
+      pen.arcTo(this.x + this.s, this.y, this.x + this.s, this.y + this.s, this.r);
+      pen.arcTo(this.x + this.s, this.y + this.s, this.x, this.y + this.s, this.r);
       pen.arcTo(this.x, this.y + this.s, this.x, this.y, this.r);
       pen.arcTo(this.x, this.y, this.x + this.s, this.y, this.r);
-      pen.arcTo(this.x + this.s, this.y, this.x + this.s, this.y + this.s, this.r);
-      pen.arcTo(this.x + this.s, this.y + this.s, this.y, this.y + this.s, this.r);
       pen.fill();
     }
 
@@ -92,11 +90,12 @@ class Block
       this.r = s/10;
     }
 
-    reposition(x, y)
+    reposition(s1, s2)
     {
-      this.x = x;
-      this.y = y;
+      this.x = s1 * this.x;
+      this.y = s2 * this.y;
     }
+
 }
 
 class PlayerBlock extends Block
@@ -182,9 +181,9 @@ class PlayerBlock extends Block
       this.v_x = 0;
     }
 
-    if (this.x+this.s > canvas.width)
+    if (this.x+this.s > game.width)
     {
-      this.x = canvas.width - this.s;
+      this.x = game.width - this.s;
       this.v_x = 0;
     }
 
@@ -194,9 +193,9 @@ class PlayerBlock extends Block
       this.v_y = 0;
     }
 
-    if (this.y+this.s > canvas.height)
+    if (this.y+this.s > game.height)
     {
-      this.y = canvas.height - this.s;
+      this.y = game.height - this.s;
       this.v_y = 0;
     }
   }
@@ -230,7 +229,6 @@ class PlayerBlock extends Block
     {
       y_shift = -(y1 - (y2 + s2));
     }
-    //
   }
 
   move()
@@ -240,17 +238,19 @@ class PlayerBlock extends Block
   }
 }
 
-let w = canvas.width;
-let h = canvas.height;
+let pw = game.width;
+let w = game.width;
+let ph = game.height;
+let h = game.height;
 
-let one = new PlayerBlock ("#59F440", 0, 0, w/7, w/70);
-let two = new Block ("#8B2D19", 3*w/7, h/3, w/7, w/70);
+let one = new PlayerBlock ("#59F440", 0, 0, w/8, w/80);
+let two = new Block ("#8B2D19", 4*w/8, h/4, w/8, w/80);
 
 animate();
 function animate ()
 {
-  w = canvas.width;
-  h = canvas.height;
+  w = game.width;
+  h = game.height;
 
   requestAnimationFrame(animate);
   pen.clearRect(0, 0, w, h);
@@ -262,7 +262,8 @@ function animate ()
 
   else
   {
-    one.resize(w/7);
+    one.resize(w/8);
+    one.reposition(w/pw, h/ph);
     one.accelerate();
     one.decelerate();
     one.collisions();
@@ -270,10 +271,15 @@ function animate ()
     one.move();
     one.roundRect();
 
-    two.resize(w/7);
-    two.reposition(3*w/7, h/3)
+    two.resize(w/8);
+    two.reposition(w/pw, h/ph);
     two.roundRect();
 
     reset();
+
+    pw = game.width;
+    ph = game.height;
   }
 }
+
+// https://stackoverflow.com/questions/12625766/javascript-canvas-detect-click-on-shape
